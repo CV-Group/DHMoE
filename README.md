@@ -39,7 +39,7 @@ To address the challenge of lightweight crowd counting in complex scenarios, we 
 
 ## Pretrained Weights
 
-The pretrained weights from [HERE](https://1drv.ms/f/s!As_uFI5TMRIPiL4wGSMrDSg8u0BZGw?e=LT9LNK).
+The pretrained weights from [HERE](https://1drv.ms/f/s!Al2dMJC6HUgQrJJ7oQyrDZz-FgY9Cw?e=IuqkUC).
 
 ## Results
 
