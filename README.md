@@ -45,7 +45,9 @@ The pretrained weights from [HERE](https://1drv.ms/f/s!As_uFI5TMRIPiL4wGSMrDSg8u
 
 ### Quantitative Results
 
-![arch](assets/sota.jpg)
+![arch](assets/crowd_counting.jpg)
+![arch](assets/large_small.jpg)
+![arch](assets/carpk_pucpr.jpg)
 
 ### Visual Results
 
