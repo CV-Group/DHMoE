@@ -255,3 +255,6 @@ Networks/OSNet/ckp/PANet_CARPK_model_best.pth
 Networks/OSNet/ckp/PANet_pucpr_model_best.pth
 *.pth
 *.tar
+test
+test1.py
+infer_time.py

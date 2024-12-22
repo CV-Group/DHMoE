@@ -4,7 +4,7 @@ parser = argparse.ArgumentParser(description="FIDTM")
 parser.add_argument(
     "--dataset",
     type=str,
-    default="UCF50_5", 
+    default="PUCPR", 
     choices=[
         "ShanghaiA",
         "ShanghaiB",
@@ -29,7 +29,7 @@ parser.add_argument(
 parser.add_argument(
     "--save_path",
     type=str,
-    default="/scratch/jingan/osnet/cross_domin/A_to_UCF50/5",
+    default="/scratch/DHMoE",
     help="cho`ice train dataset",
 )
 parser.add_argument("--workers", type=int, default=16, help="load data workers=8 or 16")
@@ -38,7 +38,7 @@ parser.add_argument(
     "--start_epoch", type=int, default=0, help="start epoch for training"
 )
 parser.add_argument("--epochs", type=int, default=3000, help="end epoch for training")
-parser.add_argument("--pre", type=str, default="/scratch/jingan/osnet/view/shanghaiA/model_best.pth", help="pre-trained model directory")
+parser.add_argument("--pre", type=str, default=None, help="pre-trained model directory")
 parser.add_argument(
     "--batch_size", type=int, default=16, help="input batch size for training"  
 )

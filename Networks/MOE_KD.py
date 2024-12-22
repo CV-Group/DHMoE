@@ -24,7 +24,7 @@ class Model(nn.Module):
     
 def teach():
     net = teacher_net()
-    model_path = '/home/jingan/wangluo/counting-total/ablation/1.0/carpk/train/model_best.pth'
+    model_path = '/scratch/PUCPR.pth'
     state_dict = torch.load(model_path)['state_dict']
     state_dict1 = {}
 

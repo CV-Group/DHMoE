@@ -4,7 +4,7 @@ import argparse
 import os
 
 parser = argparse.ArgumentParser(description="Dataset")
-parser.add_argument("--root_dir", type=str, default="/scratch/FIDTM")
+parser.add_argument("--root_dir", type=str, default="/scratch")
 args = parser.parse_args()
 
 if not os.path.exists('.npydata/npy'):
@@ -86,16 +86,16 @@ except:
     print("The QNRF dataset path is wrong. Please check your path.")
 
 try:
-    f = open("/scratch/FIDTM/NWPU_localization/NWPU_list/train.txt", "r")
+    f = open("/scratch/NWPU_localization/NWPU_list/train.txt", "r")
     train_list = f.readlines()
 
-    f = open("/scratch/FIDTM/NWPU_localization/NWPU_list/val.txt", "r")
+    f = open("/scratch/NWPU_localization/NWPU_list/val.txt", "r")
     val_list = f.readlines()
 
-    f = open("/scratch/FIDTM/NWPU_localization/NWPU_list/test.txt", "r")
+    f = open("/scratch/NWPU_localization/NWPU_list/test.txt", "r")
     test_list = f.readlines()
 
-    root = '/scratch/FIDTM/NWPU_localization/images_2048/'
+    root = '/scratch/NWPU_localization/images_2048/'
     train_img_list = []
     for i in range(len(train_list)):
         fname = train_list[i].split(' ')[0] + '.jpg'

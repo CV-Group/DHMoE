@@ -2,7 +2,7 @@
 
 This repository contains the code and resources associated with our paper titled "Towards Trustworthy Crowd Counting by Distillation Hierarchical Mixture of Experts for Edge-based Cluster Computing". Please note that the paper is currently under review for publication.
 
-The code is tested on Ubuntu 22.04 environment (Python3.8.18, PyTorch1.10.0) with an NVIDIA GeForce RTX 3090 Ti.
+The code is tested on Ubuntu 22.04 environment (Python3.8.18, PyTorch1.10.0) with an NVIDIA GeForce RTX 3080 Ti.
 
 ## Contents
 
@@ -25,17 +25,19 @@ To address the challenge of lightweight crowd counting in complex scenarios, we 
 ![arch](assets/framework.jpg)
 
 ## Train
-
+The training code will be released after the acceptance of this paper
 1. Prepare the datasets used in the experiment.
 2. Modify the data set address in `make_npydata.py` to generate the correct data set information
 3. Modify the dataset, save_path and other options in `config.py`.
 4. To ensure compatibility with the selected dataset, it is necessary to modify the path of the pretrained model in the files `Networks/teacher.py` and `Networks/MOE_KD.py`.
-4. After performing the above modifications, you can start the training process by running `python train.py`
+5. After performing the above modifications, you can start the training process by running `python train.py`
+
 
 ## Test
 
 1. Modify `test.py` to specify your own test options.
-2. After performing the above modifications, you can start the testing process by running `python test.py`.
+2. update the `pre` argument in `config.py` with the path to the pretrained model.
+3. After performing the above modifications, you can start the testing process by running `python test.py`.
 
 ## Pretrained Weights
 

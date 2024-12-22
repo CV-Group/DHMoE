@@ -163,7 +163,7 @@ def validate(Pre_data, model, args, val_list):
             fidt_map = fidt_map.unsqueeze(0)
 
         with torch.no_grad():
-            if args["network"] == "os_stu":
+            if args["network"] == "os_kd":
                 x3, x4, x5, s_out, experts = model(img) 
                 d6 = s_out
             else:  

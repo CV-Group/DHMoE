@@ -205,7 +205,7 @@ def generate_point_map(kpoint, f_loc, rate=1):
 def generate_bounding_boxes(kpoint, fname):
     '''change the data path'''
     Img_data = cv2.imread(
-        '/home/dkliang/projects/synchronous/dataset/ShanghaiTech/part_A_final/test_data/images/' + fname[0])
+        '/home/dataset/ShanghaiTech/part_A_final/test_data/images/' + fname[0])
     ori_Img_data = Img_data.copy()
 
     '''generate sigma'''
@@ -266,10 +266,10 @@ class AverageMeter(object):
 if __name__ == '__main__':
     tuner_params = nni.get_next_parameter()
     params = vars(merge_parameter(return_args, tuner_params))
-    params["save_path"] = "/scratch/jingan/osnet/nwpu/3"
+    params["save_path"] = "/scratch/nwpu"
     os.makedirs(params["save_path"], exist_ok=True)
     global logger
-    logger = get_logger("Test", "/scratch/jingan/osnet/nwpu/3/test.log")
+    logger = get_logger("Test", "/scratch/nwpu/test.log")
     logger.debug(tuner_params)
     logger.info(params)
     main(params)

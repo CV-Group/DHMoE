@@ -6,6 +6,8 @@ from thop import profile
 from torchsummary import summary
 
 class ConvLayer(nn.Module):
+    """Convolution layer."""
+
     def __init__(
         self,
         in_channels,
@@ -36,6 +38,8 @@ class ConvLayer(nn.Module):
 
 
 class Conv1x1(nn.Module):
+    """1x1 convolution."""
+
     def __init__(self, in_channels, out_channels, stride=1, groups=1):
         super(Conv1x1, self).__init__()
         self.conv = nn.Conv2d(
@@ -58,6 +62,8 @@ class Conv1x1(nn.Module):
 
 
 class Conv1x1Linear(nn.Module):
+    """1x1 convolution without non-linearity."""
+
     def __init__(self, in_channels, out_channels, stride=1):
         super(Conv1x1Linear, self).__init__()
         self.conv = nn.Conv2d(
@@ -70,7 +76,10 @@ class Conv1x1Linear(nn.Module):
         x = self.bn(x)
         return x
 
+
 class Conv3x3(nn.Module):
+    """3x3 convolution."""
+
     def __init__(self, in_channels, out_channels, stride=1, groups=1):
         super(Conv3x3, self).__init__()
         self.conv = nn.Conv2d(
@@ -93,6 +102,11 @@ class Conv3x3(nn.Module):
 
 
 class LightConv3x3(nn.Module):
+    """Lightweight 3x3 convolution.
+
+    1x1 (linear) + dw 3x3 (nonlinear).
+    """
+
     def __init__(self, in_channels, out_channels):
         super(LightConv3x3, self).__init__()
         self.conv1 = nn.Conv2d(
@@ -116,8 +130,14 @@ class LightConv3x3(nn.Module):
         x = self.bn(x)
         x = self.relu(x)
         return x
-    
+
+
+##########
+# Building blocks for omni-scale feature learning
+##########
 class ChannelGate(nn.Module):
+    """A mini-network that generates channel-wise gates conditioned on input."""
+
     def __init__(
         self,
         in_channels,
@@ -177,6 +197,8 @@ class ChannelGate(nn.Module):
 
 
 class OSBlock(nn.Module):
+    """Omni-scale feature learning block."""
+
     def __init__(self, in_channels, out_channels, **kwargs):
         super(OSBlock, self).__init__()
         mid_channels = out_channels // 4
@@ -217,7 +239,12 @@ class OSBlock(nn.Module):
         out = x3 + residual
         return F.relu(out)
 
+
+##########
+# Network architecture
+##########
 class BaseNet(nn.Module):
+
     def _make_layer(
         self, block, layer, in_channels, out_channels, reduce_spatial_size
     ):
@@ -300,6 +327,7 @@ class OSNet(BaseNet):
         assert num_blocks == len(channels) - 1
         self.loss = loss
 
+        # convolutional backbone
         self.conv1 = ConvLayer(3, channels[0], 7, stride=2, padding=3)
         self.maxpool = nn.MaxPool2d(3, stride=2, padding=1)
         self.conv2 = self._make_layer(
@@ -326,64 +354,56 @@ class OSNet(BaseNet):
         self.conv5 = Conv1x1(channels[3], channels[3])
 
     def forward(self, x):
-        x1 = self.conv1(x)
-        x = self.maxpool(x1)
-        x2 = self.conv2(x)
-        x3 = self.conv3(x2)
-        x4 = self.conv4(x3)
-        x5 = self.conv5(x4)        
-        return x1, x2, x3, x4, x5
+        x = self.conv1(x)
+        x = self.maxpool(x)
+        x = self.conv2(x)
+        x = self.conv3(x)
+        x = self.conv4(x)
+        x = self.conv5(x)
+        
+        return x
+    
+
 
 def load_osnet_weights():
-    net = OSNet(
+  net = OSNet(
         num_classes=1000,
         blocks=[OSBlock, OSBlock, OSBlock],
         layers=[2, 2, 2],
         channels=[64, 256, 384, 512],
         loss='softmax',
-    )
-    model_path = '/scratch/PUCPR.pth'
-    state_dict = torch.load(model_path)['state_dict']
-    state_dict1 = {}
-    state_dict.pop("de_pred.0.weight")
-    state_dict.pop("de_pred.0.bias")
-    state_dict.pop("de_pred.2.weight")
-    state_dict.pop("de_pred.2.bias")
-    state_dict.pop("de_pred.4.weight")
-    state_dict.pop("de_pred.4.bias")
-    state_dict.pop("de_pred.6.weight")
-    state_dict.pop("de_pred.6.bias")
+    ) 
+  model_path = '/scratch/osnet_x1_0_imagenet.pth'
+  state_dict = torch.load(model_path)
+  state_dict.pop("fc.0.weight")
+  state_dict.pop("fc.0.bias")
+  state_dict.pop("fc.1.weight")
+  state_dict.pop("fc.1.bias")
+  state_dict.pop("fc.1.running_mean")
+  state_dict.pop("fc.1.running_var")
+  state_dict.pop("fc.1.num_batches_tracked")
+  state_dict.pop("classifier.weight")
+  state_dict.pop("classifier.bias")
 
-    for k, v in state_dict.items():
-        if k.startswith('module.vgg.'):
-            new_key = k.replace('module.vgg.', '', 1)  
-        elif k.startswith('vgg.'):
-            new_key = k.replace('vgg.', '', 1) 
-        else:
-            new_key = k 
-        state_dict1[new_key] = v
-        
-    net.load_state_dict(state_dict1,strict=True)
-    for param in net.parameters():
-            param.requires_grad = False
-    return net
+  net.load_state_dict(state_dict)
+  
+  return net
+
 
 class decoder(nn.Module):
-    def __init__(self, ):
+    def __init__(self):
         super(decoder, self).__init__()
         self.vgg = load_osnet_weights()
         self.de_pred = nn.Sequential(
-                                    nn.ConvTranspose2d(512,256,4,stride=2,padding=1,output_padding=0,bias=True),
-                                    nn.ReLU(),
-                                    nn.ConvTranspose2d(256,128,4,stride=2,padding=1,output_padding=0,bias=True),
-                                    nn.ReLU(),
-                                    nn.ConvTranspose2d(128,64,4,stride=2,padding=1,output_padding=0,bias=True),
-                                    nn.ReLU(),
-                                    nn.ConvTranspose2d(64,1,4,stride=2,padding=1,output_padding=0,bias=True),
-                                    nn.ReLU(),
-                                    )
-
-    def forward(self, x):
-        x,_,_ = self.vgg(x)        
-        x = self.de_pred(x)
+                            nn.ConvTranspose2d(256,128,4,stride=2,padding=1,output_padding=0,bias=True),
+                            nn.ReLU(),
+                            nn.ConvTranspose2d(128,64,4,stride=2,padding=1,output_padding=0,bias=True),
+                            nn.ReLU(),
+                            nn.ConvTranspose2d(64,32,4,stride=2,padding=1,output_padding=0,bias=True),
+                            nn.ReLU(),
+                            nn.ConvTranspose2d(32,1,4,stride=2,padding=1,output_padding=0,bias=True),
+                            )
+    def forward(self, x):  
+        t_outputs = self.vgg(x)           
+        x = self.de_pred(t_outputs)
         return x
