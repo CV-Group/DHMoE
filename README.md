@@ -27,7 +27,7 @@ To address the challenge of lightweight crowd counting in complex scenarios, we 
 ## Train
 The training code will be released after the acceptance of this paper
 1. Prepare the datasets used in the experiment.
-2. Modify the data set address in `make_npydata.py` to generate the correct data set information
+2. Modify the data set address in `make_npydata.py` to generate the correct dataset information
 3. Modify the dataset, save_path and other options in `config.py`.
 4. To ensure compatibility with the selected dataset, it is necessary to modify the path of the pretrained model in the files `Networks/teacher.py` and `Networks/MOE_KD.py`.
 5. After performing the above modifications, you can start the training process by running `python train.py`
