@@ -241,7 +241,7 @@ Networks/ASCRNet/ghostnet_1x-f97d70db.pth
 Networks/ascrnet
 Networks/vmamba/classification
 docker
-train.py
+
 dataset_copy.py
 npydata/npy
 data
