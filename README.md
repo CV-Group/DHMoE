@@ -56,20 +56,21 @@ The pretrained weights from [HERE](https://1drv.ms/f/s!Al2dMJC6HUgQrJJ7oQyrDZz-F
 ![arch](assets/crowd.jpg)
 ![arch](assets/vehicle.jpg)
 
-## Citation
+<!-- ## Citation
 
 If you find this code or research helpful, please consider citing our paper:
 
 ```BibTeX
-@article{Cheng2024DHMoE,
+@article{Cheng2025DHMoE,
 title={Towards Trustworthy Crowd Counting by Distillation Hierarchical Mixture of Experts for Edge-based Cluster Computing},
 author={Cheng, Jing-an and Li, Qilei and Alireza Souri and Lei, Xiang and Zhang, Chen and Gao, Mingliang},
 journal={under_review}
-year={2024},
+year={2025},
 }
 ```
-Please note that this citation is a placeholder and will be updated with the actual citation information once the paper is accepted and published. We kindly request you to revisit this section and replace the placeholder with the correct citation detail.
+Please note that this citation is a placeholder and will be updated with the actual citation information once the paper is accepted and published. We kindly request you to revisit this section and replace the placeholder with the correct citation detail. -->
 
 ## Acknowledgements
 
-This code is built on [DSPI](https://github.com/jinyongch/DSPI) and [FIDTM](https://github.com/dk-liang/FIDTM). We thank the authors for sharing their codes.
+This code is built on [FIDTM](https://github.com/dk-liang/FIDTM). We thank the authors for sharing their codes.
+<!-- This code is built on [DSPI](https://github.com/jinyongch/DSPI) and [FIDTM](https://github.com/dk-liang/FIDTM). We thank the authors for sharing their codes. -->
